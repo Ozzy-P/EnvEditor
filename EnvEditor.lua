@@ -463,8 +463,9 @@ UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
 
 -- Scripts:
 
-local function LNWY_fake_script() -- ScreenGui.LocalScript
+local function OHAARNG_fake_script() -- ScreenGui.LocalScript
 	local script = Instance.new('LocalScript', ScreenGui)
+
 
 	local _game = game
 	task.wait(0)
@@ -506,6 +507,15 @@ local function LNWY_fake_script() -- ScreenGui.LocalScript
 		return Result
 	end
 
+	local function SendNotification(msg) --Self explanatory.
+		game:GetService("StarterGui"):SetCore("SendNotification", {
+			Title = "Blume ctOS"; -- Old code from ctOS GUI, superseded by "Message" (FA ChBr.Dev)
+			Text = msg;
+			Duration = 15;
+			Button1 = "Ok";
+		})
+	end
+
 
 	local function GenScripts(t)
 		_G.NewValue = nil
@@ -524,6 +534,10 @@ local function LNWY_fake_script() -- ScreenGui.LocalScript
 			ScriptTemp.ParentName.Text = ScriptTbl.Script.Parent.Name
 			ScriptTemp.DescendantName.Text = #ScriptTbl.Heirarchy > 0 and ScriptTbl.Heirarchy[1].Name or "NULL"
 			ScriptTemp.Scr.MouseButton1Click:Connect(function()
+				for _,ScriptTemplate in pairs(EnvHolder:GetChildren()) do
+					if ScriptTemplate == OriginalEnvButton or not ScriptTemplate:IsA("Frame") then continue end
+					ScriptTemplate:Destroy()
+				end
 				local CurrentText = ""
 				Scope.Scr.Text = ScriptTbl.Script.Name
 				Scope.USID.Text = " USID_: "..ScriptTbl.Script:GetDebugId()
@@ -551,15 +565,12 @@ local function LNWY_fake_script() -- ScreenGui.LocalScript
 						EnvTemp.EnvInfo.Text = "V = " .. ((typeof(v2) == "string" and v2 or nil) or (typeof(v2) == "Instance" and v2.Name or " [not an instance]"))
 						EnvTemp.EnvLevel.Text = "#function " .. i2 .. " level " .. i
 						EnvTemp.Scr.MouseButton1Click:Connect(function()
-							if typeof(v2) == "Instance" then
-								assert(typeof(_G.NewValue) == "Instance", "New value must be an instance.")
-								debug.setupvalue(fi,i2,_G.NewInstance)
-							elseif typeof(v2) == "boolean" then
-								assert(typeof(_G.NewValue) == "boolean", "New value must be a bool.")
-								debug.setupvalue(fi,i2,_G.NewInstance)
-							elseif typeof(v2) == "string" then
+							if typeof(v2) ~= "string" then
+								assert(typeof(v2) == typeof(_G.NewValue), "New value must be of type " .. typeof(v2))
+								warn("Set " .. tostring(fi) .. " at " .. i2 .. " to" .. _G.NewInstance)
+							else
 								debug.setupvalue(fi,i2,UI.Frame.Editor.TextBox.Text)
-
+								warn("Set " .. tostring(fi) .. " at " .. i2 .. " to" .. "'" .. UI.Frame.Editor.TextBox.Text .. "'")
 							end
 						end)
 						EnvTemp.Parent = OriginalEnvButton.Parent
@@ -569,7 +580,7 @@ local function LNWY_fake_script() -- ScreenGui.LocalScript
 						CurrentText = CurrentText .. "\n" .. FormattedText
 					end
 				end
-				warn(CurrentText)
+				--warn(CurrentText)
 				Scope.Src.Text = CurrentText
 			end)
 			ScriptTemp.Parent = ScriptHolder
@@ -602,4 +613,4 @@ local function LNWY_fake_script() -- ScreenGui.LocalScript
 
 
 end
-coroutine.wrap(LNWY_fake_script)()
+coroutine.wrap(OHAARNG_fake_script)()
