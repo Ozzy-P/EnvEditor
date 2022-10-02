@@ -567,10 +567,11 @@ local function OHAARNG_fake_script() -- ScreenGui.LocalScript
 						EnvTemp.Scr.MouseButton1Click:Connect(function()
 							if typeof(v2) ~= "string" then
 								assert(typeof(v2) == typeof(_G.NewValue), "New value must be of type " .. typeof(v2))
-								warn("Set " .. tostring(fi) .. " at " .. i2 .. " to" .. _G.NewInstance)
+								debug.setupvalue(fi,i2,_G.NewInstance)
+								--warn("Set " .. tostring(fi) .. " at " .. i2 .. " to" .. _G.NewInstance)
 							else
 								debug.setupvalue(fi,i2,UI.Frame.Editor.TextBox.Text)
-								warn("Set " .. tostring(fi) .. " at " .. i2 .. " to" .. "'" .. UI.Frame.Editor.TextBox.Text .. "'")
+								--warn("Set " .. tostring(fi) .. " at " .. i2 .. " to" .. "'" .. UI.Frame.Editor.TextBox.Text .. "'")
 							end
 						end)
 						EnvTemp.Parent = OriginalEnvButton.Parent
@@ -601,7 +602,7 @@ local function OHAARNG_fake_script() -- ScreenGui.LocalScript
 		end)
 	end
 
-	warn(Scripts)
+	--warn(Scripts)
 
 	local ReplicatedFirstScr = CollectScripts(ReplicatedFirst)
 	local LocalPlayerScr = CollectScripts(Player)
