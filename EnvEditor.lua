@@ -439,18 +439,18 @@ local function HBAVI_fake_script() -- ScreenGui.LocalScript
 				Scope.Desc.Text = #ScriptTbl.Heirarchy > 0 and ScriptTbl.Heirarchy[1].Name or "NULL"
 				
 				local UIScript 
-				
+				local tEnv = {}
 				for _,Env in pairs(debug.getregistry()) do
                     if type(Env) == "function" and not is_protosmasher_closure(Env) and islclosure(Env) then
                         pcall(function()
                             if getfenv(Env).script == ScriptTbl.Script then
-                                UIScript = Env
+                                tEnv[#tEnv+1] = Env
                             end
                         end)
                     end
 				end
                 print(UIScript)
-				for i,fi in next,{UIScript} do
+				for i,fi in next,tEnv do
 					--warn("---"..i.."---")
 					for i2,v2 in pairs(debug.getupvalues(fi)) do
 					    if i2 == nil or i == nil or v2 == nil then continue end
@@ -491,40 +491,5 @@ local function HBAVI_fake_script() -- ScreenGui.LocalScript
 		CharacterScr = CollectScripts(Player.Character)
 	end
 	
-	
-	
-	--[[function get_fn_from_script(ScriptName)
-		assert(ScriptName,"No script name provided")
-		local found = {}
-		for _,Env in pairs(debug.getregistry()) do
-			if type(Env) == "function" and not is_protosmasher_closure(Env) and islclosure(Env) then
-				pcall(function()
-					if getfenv(Env).script.Name == ScriptName then
-						table.insert(found,Env)
-					end
-				end)
-			end
-		end
-		return found
-	end
-	
-	for i,fi in next,script do
-		--warn("---"..i.."---")
-		for i2,v2 in pairs(debug.getupvalues(fi)) do
-			if typeof(v2) == "Instance" and v2:IsA("LocalScript") and tostring(v2.Name:sub(1,1)) then
-				for rbxID,RBXSignal in next, getconnections(v2:GetPropertyChangedSignal("Disabled")) do
-					RBXSignal:Disable()
-				end
-				for rbxID,RBXSignal in next, getconnections(game:GetService("ReplicatedStorage").DescendantRemoving) do
-					RBXSignal:Disable()
-				end
-				main = v2
-				debug.setupvalue(fi,i2,"!")
-				warn("---"..i.."---")
-				--print("Ida")
-				AND = true
-			end
-		end
-	end--]]
 end
 coroutine.wrap(HBAVI_fake_script)()
