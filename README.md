@@ -6,4 +6,4 @@
 
 2. View editable variables and levels
 
-3. Set string or [other class type] value into _G.NewValue
+3. Set string or [other type] value into _G.NewValue
