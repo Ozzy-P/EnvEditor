@@ -38,6 +38,14 @@ local Src = Instance.new("TextLabel")
 local UIPadding = Instance.new("UIPadding")
 local TextButton = Instance.new("TextButton")
 local UICorner_2 = Instance.new("UICorner")
+local BtnE = Instance.new("Frame")
+local ScrollingFrame_2 = Instance.new("ScrollingFrame")
+local Script_2 = Instance.new("Frame")
+local EnvInfo = Instance.new("TextLabel")
+local EnvLevel = Instance.new("TextLabel")
+local EnvType = Instance.new("TextLabel")
+local Scr_3 = Instance.new("ImageButton")
+local UIListLayout_2 = Instance.new("UIListLayout")
 
 --Properties:
 
@@ -377,9 +385,85 @@ TextButton.TextWrapped = true
 
 UICorner_2.Parent = TextButton
 
+BtnE.Name = "BtnE"
+BtnE.Parent = Editor
+BtnE.BackgroundColor3 = Color3.fromRGB(38, 33, 54)
+BtnE.BorderSizePixel = 0
+BtnE.Position = UDim2.new(0.75165379, 0, -0.00482520647, 0)
+BtnE.Size = UDim2.new(0.249676302, 0, 0.42785278, 0)
+
+ScrollingFrame_2.Parent = BtnE
+ScrollingFrame_2.Active = true
+ScrollingFrame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ScrollingFrame_2.BackgroundTransparency = 1.000
+ScrollingFrame_2.BorderSizePixel = 0
+ScrollingFrame_2.Position = UDim2.new(0.000999982469, 0, 0, 0)
+ScrollingFrame_2.Size = UDim2.new(0.99900043, 0, 1.00000024, 0)
+ScrollingFrame_2.ScrollBarThickness = 8
+
+Script_2.Name = "Script"
+Script_2.Parent = ScrollingFrame_2
+Script_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Script_2.Position = UDim2.new(0, 0, -1.1546436e-07, 0)
+Script_2.Size = UDim2.new(0.964386046, 0, 0.150442347, 0)
+Script_2.Visible = false
+
+EnvInfo.Name = "EnvInfo"
+EnvInfo.Parent = Script_2
+EnvInfo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+EnvInfo.BackgroundTransparency = 1.000
+EnvInfo.BorderSizePixel = 0
+EnvInfo.Position = UDim2.new(0.119999997, 0, 0.0576924533, 0)
+EnvInfo.Size = UDim2.new(0.75999999, 0, 0.478709638, 0)
+EnvInfo.Font = Enum.Font.Gotham
+EnvInfo.Text = "%fi% %idx%"
+EnvInfo.TextColor3 = Color3.fromRGB(0, 0, 0)
+EnvInfo.TextScaled = true
+EnvInfo.TextSize = 14.000
+EnvInfo.TextWrapped = true
+
+EnvLevel.Name = "EnvLevel"
+EnvLevel.Parent = Script_2
+EnvLevel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+EnvLevel.BackgroundTransparency = 1.000
+EnvLevel.BorderSizePixel = 0
+EnvLevel.Position = UDim2.new(0.565999985, 0, 0.52700001, 0)
+EnvLevel.Size = UDim2.new(0.382368237, 0, 0.317009717, 0)
+EnvLevel.Font = Enum.Font.Gotham
+EnvLevel.Text = "%level%"
+EnvLevel.TextColor3 = Color3.fromRGB(0, 0, 0)
+EnvLevel.TextScaled = true
+EnvLevel.TextSize = 14.000
+EnvLevel.TextWrapped = true
+
+EnvType.Name = "EnvType"
+EnvType.Parent = Script_2
+EnvType.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+EnvType.BackgroundTransparency = 1.000
+EnvType.BorderSizePixel = 0
+EnvType.Position = UDim2.new(0.120000035, 0, 0.527084768, 0)
+EnvType.Size = UDim2.new(0.382368237, 0, 0.317009717, 0)
+EnvType.Font = Enum.Font.Gotham
+EnvType.Text = "%type%"
+EnvType.TextColor3 = Color3.fromRGB(0, 0, 0)
+EnvType.TextScaled = true
+EnvType.TextSize = 14.000
+EnvType.TextWrapped = true
+
+Scr_3.Name = "Scr"
+Scr_3.Parent = Script_2
+Scr_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Scr_3.BackgroundTransparency = 1.000
+Scr_3.BorderSizePixel = 0
+Scr_3.Position = UDim2.new(0.119104356, 0, 0.0847691223, 0)
+Scr_3.Size = UDim2.new(0.75999999, 0, 0.479000002, 0)
+
+UIListLayout_2.Parent = ScrollingFrame_2
+UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+
 -- Scripts:
 
-local function HBAVI_fake_script() -- ScreenGui.LocalScript 
+local function LNWY_fake_script() -- ScreenGui.LocalScript
 	local script = Instance.new('LocalScript', ScreenGui)
 
 	local _game = game
@@ -389,20 +473,22 @@ local function HBAVI_fake_script() -- ScreenGui.LocalScript
 			return _game:GetService(key)
 		end
 	})
-	
-	
+
+
 	-- Services
 	local Players = game.Players
 	local ReplicatedFirst = game.ReplicatedFirst
 	local Workspace = game.Workspace
 	local Player = Players.LocalPlayer
-	
+
 	-- Vars
 	local UI = script.Parent
 	local ScriptHolder = UI.Frame.Editor.List.ScrollingFrame
 	local OriginalTemplate = ScriptHolder.Script
+	local EnvHolder = UI.Frame.Editor.BtnE.ScrollingFrame
+	local OriginalEnvButton = EnvHolder.Script
 	local Scope = UI.Frame.Editor.Scope
-	
+
 	-- Collector
 	local function CollectScripts(l)
 		local Result = {}
@@ -419,11 +505,16 @@ local function HBAVI_fake_script() -- ScreenGui.LocalScript
 		end
 		return Result
 	end
-	
-	
+
+
 	local function GenScripts(t)
+		_G.NewValue = nil
 		for _,ScriptTemplate in pairs(ScriptHolder:GetChildren()) do
 			if ScriptTemplate == OriginalTemplate or not ScriptTemplate:IsA("Frame") then continue end
+			ScriptTemplate:Destroy()
+		end
+		for _,ScriptTemplate in pairs(EnvHolder:GetChildren()) do
+			if ScriptTemplate == OriginalEnvButton or not ScriptTemplate:IsA("Frame") then continue end
 			ScriptTemplate:Destroy()
 		end
 		if t == nil or #t == 0 then return end
@@ -435,29 +526,46 @@ local function HBAVI_fake_script() -- ScreenGui.LocalScript
 			ScriptTemp.Scr.MouseButton1Click:Connect(function()
 				local CurrentText = ""
 				Scope.Scr.Text = ScriptTbl.Script.Name
-				Scope.USID.Text = "USID_:"..ScriptTbl.Script:GetDebugId()
+				Scope.USID.Text = " USID_: "..ScriptTbl.Script:GetDebugId()
 				Scope.Desc.Text = #ScriptTbl.Heirarchy > 0 and ScriptTbl.Heirarchy[1].Name or "NULL"
-				
-				local UIScript 
+
+
 				local tEnv = {}
 				for _,Env in pairs(debug.getregistry()) do
-                    if type(Env) == "function" and not is_protosmasher_closure(Env) and islclosure(Env) then
-                        pcall(function()
-                            if getfenv(Env).script == ScriptTbl.Script then
-                                tEnv[#tEnv+1] = Env
-                            end
-                        end)
-                    end
+					if type(Env) == "function" and not is_protosmasher_closure(Env) and islclosure(Env) then
+						pcall(function()
+							if getfenv(Env).script == ScriptTbl.Script then
+								tEnv[#tEnv+1] = Env
+							end
+						end)
+					end
 				end
-                print(UIScript)
+
 				for i,fi in next,tEnv do
 					--warn("---"..i.."---")
 					for i2,v2 in pairs(debug.getupvalues(fi)) do
-					    if i2 == nil or i == nil or v2 == nil then continue end
+						if i2 == nil or i == nil or v2 == nil then continue end
 
+						local EnvTemp = OriginalEnvButton:Clone()
+						EnvTemp.EnvType.Text = typeof(v2)
+						EnvTemp.EnvInfo.Text = "V = " .. ((typeof(v2) == "string" and v2 or nil) or (typeof(v2) == "Instance" and v2.Name or " [not an instance]"))
+						EnvTemp.EnvLevel.Text = "#function " .. i2 .. " level " .. i
+						EnvTemp.Scr.MouseButton1Click:Connect(function()
+							if typeof(v2) == "Instance" then
+								assert(typeof(_G.NewValue) == "Instance", "New value must be an instance.")
+								debug.setupvalue(fi,i2,_G.NewInstance)
+							elseif typeof(v2) == "boolean" then
+								assert(typeof(_G.NewValue) == "boolean", "New value must be a bool.")
+								debug.setupvalue(fi,i2,_G.NewInstance)
+							elseif typeof(v2) == "string" then
+								debug.setupvalue(fi,i2,UI.Frame.Editor.TextBox.Text)
 
---warn(i2 .. ", level " .. i .. " value: " .. (v2.Name or " [not an instance]") .. ", class (" .. typeof(v2) .. ", " .. (v2.ClassName or " [not an instance]") .. ")" )
-						local FormattedText = i2 .. ", level " .. i .. " value: " .. ((typeof(v2) == "String" and v2 or nil) or (typeof(v2) == "Instance" and v2.Name or " [not an instance]")) .. ", class (" .. typeof(v2) .. ", " .. (typeof(v2) == "Instance" and v2.ClassName or " [not an instance]") .. ")" 
+							end
+						end)
+						EnvTemp.Parent = OriginalEnvButton.Parent
+						EnvTemp.Visible = true
+						--warn(i2 .. ", level " .. i .. " value: " .. (v2.Name or " [not an instance]") .. ", class (" .. typeof(v2) .. ", " .. (v2.ClassName or " [not an instance]") .. ")" )
+						local FormattedText = i2 .. ", level " .. i .. " value: " .. ((typeof(v2) == "string" and v2 or nil) or (typeof(v2) == "Instance" and v2.Name or " [not an instance]")) .. ", class (" .. typeof(v2) .. ", " .. (typeof(v2) == "Instance" and v2.ClassName or " [not an instance]") .. ")"
 						CurrentText = CurrentText .. "\n" .. FormattedText
 					end
 				end
@@ -468,28 +576,30 @@ local function HBAVI_fake_script() -- ScreenGui.LocalScript
 			ScriptTemp.Visible = true
 		end
 	end
-	
+
 	local Scripts = {
 		["ReplicatedFirst"] = CollectScripts(ReplicatedFirst),
 		["LocalPlayer"] = CollectScripts(Player),
 		["Character"] = Player.Character and CollectScripts(Player.Character) or nil,
 		["Misc"] = CollectScripts(Workspace)
 	}
-	
+
 	for _,ScriptsCollected in pairs(Scripts) do
 		UI.Frame.scr[_].btn.MouseButton1Click:Connect(function()
 			GenScripts(ScriptsCollected)
 		end)
 	end
-	
+
 	warn(Scripts)
-	
+
 	local ReplicatedFirstScr = CollectScripts(ReplicatedFirst)
 	local LocalPlayerScr = CollectScripts(Player)
 	local CharacterScr
 	if Player.Character then
 		CharacterScr = CollectScripts(Player.Character)
 	end
-	
+
+
+
 end
-coroutine.wrap(HBAVI_fake_script)()
+coroutine.wrap(LNWY_fake_script)()
