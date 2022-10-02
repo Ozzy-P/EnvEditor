@@ -243,12 +243,13 @@ ScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ScrollingFrame.BorderSizePixel = 0
 ScrollingFrame.Position = UDim2.new(0.000999982469, 0, 0, 0)
 ScrollingFrame.Size = UDim2.new(0.99900043, 0, 1.00000024, 0)
+ScrollingFrame.CanvasSize = UDim2.new(0, 0, 6, 0)
 ScrollingFrame.ScrollBarThickness = 8
 
 Script.Name = "Script"
 Script.Parent = ScrollingFrame
 Script.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Script.Size = UDim2.new(0.964386106, 0, 0.0903553441, 0)
+Script.Size = UDim2.new(0.964386106, 0, 0, 45)
 Script.Visible = false
 
 ScriptName.Name = "ScriptName"
@@ -397,6 +398,7 @@ ScrollingFrame_2.Active = true
 ScrollingFrame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ScrollingFrame_2.BackgroundTransparency = 1.000
 ScrollingFrame_2.BorderSizePixel = 0
+ScrollingFrame_2.CanvasSize = UDim2.new(0,0,9,0)
 ScrollingFrame_2.Position = UDim2.new(0.000999982469, 0, 0, 0)
 ScrollingFrame_2.Size = UDim2.new(0.99900043, 0, 1.00000024, 0)
 ScrollingFrame_2.ScrollBarThickness = 8
@@ -405,7 +407,7 @@ Script_2.Name = "Script"
 Script_2.Parent = ScrollingFrame_2
 Script_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Script_2.Position = UDim2.new(0, 0, -1.1546436e-07, 0)
-Script_2.Size = UDim2.new(0.964386046, 0, 0.150442347, 0)
+Script_2.Size = UDim2.new(0.964386046, 0, 0, 35)
 Script_2.Visible = false
 
 EnvInfo.Name = "EnvInfo"
@@ -558,11 +560,11 @@ local function OHAARNG_fake_script() -- ScreenGui.LocalScript
 				for i,fi in next,tEnv do
 					--warn("---"..i.."---")
 					for i2,v2 in pairs(debug.getupvalues(fi)) do
-						if i2 == nil or i == nil or v2 == nil then continue end
+						if i2 == nil or i == nil then continue end
 
 						local EnvTemp = OriginalEnvButton:Clone()
 						EnvTemp.EnvType.Text = typeof(v2)
-						EnvTemp.EnvInfo.Text = "V = " .. ((typeof(v2) == "string" and v2 or nil) or (typeof(v2) == "Instance" and v2.Name or " [not an instance]"))
+						EnvTemp.EnvInfo.Text = "V = " .. ((typeof(v2) == "string" and v2 or nil) or (typeof(v2) == "boolean" and tostring(v2) or nil) or (typeof(v2) == "Instance" and v2.Name or " [not an instance]"))
 						EnvTemp.EnvLevel.Text = "#function " .. i2 .. " level " .. i
 						EnvTemp.Scr.MouseButton1Click:Connect(function()
 							if typeof(v2) ~= "string" then
