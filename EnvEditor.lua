@@ -618,6 +618,7 @@ local function DVXN_fake_script() -- EnvEditorv01.LocalScript
 			if ScriptTemplate == OriginalEnvButton or not ScriptTemplate:IsA("Frame") then continue end
 			ScriptTemplate:Destroy()
 		end
+		ScriptHolder.CanvasPosition = Vector2.new(0,0)
 		if t == nil or #t == 0 then return end
 		for _,ScriptTbl in pairs(t) do
 			local ScriptTemp = OriginalTemplate:Clone()
@@ -629,6 +630,7 @@ local function DVXN_fake_script() -- EnvEditorv01.LocalScript
 					if ScriptTemplate == OriginalEnvButton or not ScriptTemplate:IsA("Frame") then continue end
 					ScriptTemplate:Destroy()
 				end
+				EnvHolder.CanvasPosition = Vector2.new(0,0)
 				local CurrentText = ""
 				Scope.Scr.Text = ScriptTbl.Script.Name
 				Scope.USID.Text = " USID_: "..ScriptTbl.Script:GetDebugId()
@@ -681,15 +683,15 @@ local function DVXN_fake_script() -- EnvEditorv01.LocalScript
 	end
 	
 	local Scripts = {
-		["ReplicatedFirst"] = CollectScripts(ReplicatedFirst),
-		["LocalPlayer"] = CollectScripts(Player),
-		["Character"] = Player.Character and CollectScripts(Player.Character) or nil,
-		["Misc"] = CollectScripts(Workspace)
+		["ReplicatedFirst"] = ReplicatedFirst,
+		["LocalPlayer"] = Player,
+		["Character"] = Player.Character or nil,
+		["Misc"] = Workspace
 	}
 	
-	for _,ScriptsCollected in pairs(Scripts) do
+	for _,ScriptsToCollect in pairs(Scripts) do
 		UI.Frame.scr[_].btn.MouseButton1Click:Connect(function()
-			GenScripts(ScriptsCollected)
+			GenScripts(CollectScripts(ScriptsToCollect))
 		end)
 	end
 	
